@@ -1,9 +1,0 @@
-web/
-test/
-scripts/
-src/
-dist/*.tgz
-
-vite.config.js
-tsconfig.json
-*.tgz

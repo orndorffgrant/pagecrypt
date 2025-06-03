@@ -1,0 +1,10 @@
+{
+  "fmt": {
+    "exclude": [
+      "LICENSE.md"
+    ]
+  },
+  "tasks": {
+    "compile": "deno compile --target x86_64-unknown-linux-gnu --output ./dist/lesser-pagecrypt --include src/decrypt-template.html ./src/cli.ts"
+  }
+}

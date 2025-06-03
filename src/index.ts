@@ -1,7 +1,8 @@
-import { mkdir, readFile, writeFile } from 'fs/promises'
-import { resolve, dirname } from 'path'
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
+import process from "node:process";
 
-import { generatePassword, encryptHTML } from './core'
+import { encryptHTML, generatePassword } from "./core.ts";
 
 /**
  * Encrypt a HTML file with a given password.
@@ -13,21 +14,21 @@ import { generatePassword, encryptHTML } from './core'
  * @returns A promise that will resolve with the encrypted HTML content
  */
 async function encryptFile(
-    inputFile: string,
-    password: string,
-    iterations?: number,
+  inputFile: string,
+  password: string,
+  iterations?: number,
 ) {
-    let content: string
-    try {
-        content = await readFile(resolve(process.cwd(), inputFile), {
-            encoding: 'utf-8',
-        })
-    } catch (e) {
-        console.error('❌ Error reading file: ', e)
-        process.exit(1)
-    }
+  let content: string;
+  try {
+    content = await readFile(resolve(process.cwd(), inputFile), {
+      encoding: "utf-8",
+    });
+  } catch (e) {
+    console.error("❌ Error reading file: ", e);
+    process.exit(1);
+  }
 
-    return await encryptHTML(content, password, iterations)
+  return await encryptHTML(content, password, iterations);
 }
 
 /**
@@ -38,11 +39,11 @@ async function encryptFile(
  * @returns A promise that will resolve when the file has been saved.
  */
 async function saveFile(outputFile: string, content: string) {
-    await mkdir(dirname(outputFile), { recursive: true })
+  await mkdir(dirname(outputFile), { recursive: true });
 
-    return writeFile(resolve(process.cwd(), outputFile), content, {
-        encoding: 'utf8',
-    })
+  return writeFile(resolve(process.cwd(), outputFile), content, {
+    encoding: "utf8",
+  });
 }
 
 /**
@@ -56,13 +57,13 @@ async function saveFile(outputFile: string, content: string) {
  * @returns A promise that will resolve when the encrypted file has been saved.
  */
 async function encrypt(
-    inputFile: string,
-    outputFile: string,
-    password: string,
-    iterations?: number,
+  inputFile: string,
+  outputFile: string,
+  password: string,
+  iterations?: number,
 ) {
-    const encrypted = await encryptFile(inputFile, password, iterations)
-    return await saveFile(outputFile, encrypted)
+  const encrypted = await encryptFile(inputFile, password, iterations);
+  return await saveFile(outputFile, encrypted);
 }
 
-export { encrypt, generatePassword, encryptHTML }
+export { encrypt, encryptHTML, generatePassword };
