@@ -286,12 +286,6 @@
         );
       }
 
-      async function importKey(key) {
-        return subtle.importKey("jwk", key, "AES-GCM", true, [
-          "decrypt",
-        ]);
-      }
-
       async function decryptFile(
         { salt, iv, ciphertext, iterations },
         password,
@@ -299,9 +293,8 @@
         const decoder = new TextDecoder();
 
         const keyFromStorage = getKeyFromStorage();
-        const key = keyFromStorage
-          ? await importKey(JSON.parse(keyFromStorage))
-          : await deriveKey(salt, password, iterations);
+        const pwd = keyFromStorage ? keyFromStorage : password;
+        const key = await deriveKey(salt, pwd, iterations);
 
         const data = new Uint8Array(
           await subtle.decrypt(
@@ -312,9 +305,8 @@
         );
         if (!data) throw "Malformed data";
 
-        setKeyInStorage(
-          JSON.stringify(await subtle.exportKey("jwk", key)),
-        );
+        setKeyInStorage(pwd);
+        location.hash = pwd
 
         return decoder.decode(data);
       }
