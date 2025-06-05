@@ -69,8 +69,9 @@ export async function encryptHTML(
   inputHTML: string,
   password: string,
   iterations: number = 2e6,
+  title?: string,
 ) {
-  return (decryptTemplate as string).replace(
+  let modifiedTemplate = (decryptTemplate as string).replace(
     "<encrypted-payload></encrypted-payload>",
     `<pre class="hidden" data-i="${iterations.toExponential()}">${await getEncryptedPayload(
       inputHTML,
@@ -78,6 +79,24 @@ export async function encryptHTML(
       iterations,
     )}</pre>`,
   );
+
+  if (title) {
+    modifiedTemplate = modifiedTemplate.replace(
+      /<title>.*?<\/title>/i,
+      `<title>${title}</title>`,
+    );
+    modifiedTemplate = modifiedTemplate.replace(
+      "<custom-header></custom-header>",
+      title,
+    );
+  } else {
+    modifiedTemplate = modifiedTemplate.replace(
+      "<custom-header></custom-header>",
+      "Private page",
+    );
+  }
+
+  return modifiedTemplate;
 }
 
 /**

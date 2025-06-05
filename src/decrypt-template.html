@@ -15,6 +15,17 @@
         --accent: #4a90e2;
       }
 
+      #page-header {
+        text-align: center;
+        margin-bottom: 15px;
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        font-weight: 300;
+        max-width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
       @media (prefers-color-scheme: light) {
         :root {
           --bg-primary: #f4f4f4;
@@ -50,6 +61,7 @@
         align-items: center;
         justify-content: center;
         line-height: 1.6;
+        font-size: 16px;
       }
 
       .container {
@@ -126,6 +138,7 @@
         <p>Loading...</p>
       </div>
       <header class="hidden">
+        <div id="page-header"><custom-header></custom-header></div>
         <p id="msg">This page is password protected.</p>
       </header>
       <form class="hidden">
@@ -306,7 +319,7 @@
         if (!data) throw "Malformed data";
 
         setKeyInStorage(pwd);
-        location.hash = pwd
+        location.hash = pwd;
 
         return decoder.decode(data);
       }

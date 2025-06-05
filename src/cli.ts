@@ -8,6 +8,7 @@ const {
   values: {
     "generate-password": generatedLength,
     iterations: passwordIterations,
+    title: pageTitle,
     help: printHelp,
     version: printVersion,
   },
@@ -21,6 +22,10 @@ const {
     },
     iterations: {
       short: "i",
+      type: "string",
+    },
+    title: {
+      short: "t",
       type: "string",
     },
     version: {
@@ -56,7 +61,7 @@ async function main() {
     if (Number.isInteger(length)) {
       const pass = generatePassword(length);
       console.log(`🔐 Encrypting ${src} → ${dest} with 🔑: ${pass}`);
-      await encrypt(src, dest, pass, iterations);
+      await encrypt(src, dest, pass, iterations, pageTitle);
     } else {
       console.error(
         "❌: The <length> must be an integer when using --generate-password <length>",
@@ -65,7 +70,7 @@ async function main() {
     }
   } else if (password) {
     console.log(`🔐 Encrypting ${src} → ${dest}`);
-    await encrypt(src, dest, password, iterations);
+    await encrypt(src, dest, password, iterations, pageTitle);
   } else {
     console.error(
       "❌: Either provide a password or use --generate-password <length>",
